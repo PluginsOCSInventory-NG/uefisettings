@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hookstore>
+    <hook type="lang">
+        <value>en_GB</value>
+        <value>fr_FR</value>
+        <value>nl_NL</value>
+    </hook>
+    <hook type="cdentry">
+        <identifier>cd_uefisettings</identifier>
+        <translation>33000</translation>
+        <category>other</category>
+        <available>uefisettings</available>
+    </hook>
+</hookstore>
