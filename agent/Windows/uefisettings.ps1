@@ -49,7 +49,7 @@ Try {
         write-verbose "[core][hp][wmi] Done gathering UEFI settings, found $($uefiSettings.count) settings"
         write-verbose "[core][hp][xml] Generating..."
         foreach ($uefiSetting in $uefiSettings) {
-            if ($uefiSetting.Name -and $uefiSetting.CurrentValue) {
+            if (!([string]::IsNullOrEmpty($uefiSetting.Name)) -and !([string]::IsNullOrEmpty($uefiSetting.CurrentValue))) {
                 $resultXML += $(GenerateXML $($uefiSetting.Name) $($uefiSetting.CurrentValue))
             }
         } 
@@ -63,7 +63,7 @@ Try {
         write-verbose "[core][lenovo][xml] Generating..."
         foreach ($uefiSetting in $uefiSettings) {
             $uefiSettingSplit = $(($uefiSetting.CurrentSetting).Split(','))
-            if ($uefiSettingSplit[0] -and $uefiSettingSplit[1]) {
+            if (!([string]::IsNullOrEmpty($uefiSettingSplit[0])) -and !([string]::IsNullOrEmpty($uefiSettingSplit[1]))) {
                 $resultXML += $(GenerateXML $($uefiSettingSplit[0]) $($uefiSettingSplit[1]))
             }
         }
