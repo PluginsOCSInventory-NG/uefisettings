@@ -69,6 +69,35 @@ Try {
         }
         write-verbose "[core][lenovo][xml] Done generating"
     }
+
+    # Run WMI query if manufacturer is Dell Inc.
+    if ($manufacturer -eq "dell inc.") {
+        write-verbose "[core][dell][wmi] Gathering UEFI settings: Part 1"
+        $uefiSettings = $(Get-CimInstance -Namespace root\dcim\sysman\biosattributes -ClassName EnumerationAttribute)
+        write-verbose "[core][dell][wmi] Done gathering UEFI settings: Part 1"
+        write-verbose "[core][dell][wmi] Gathering UEFI settings: Part 2"
+        $uefiSettings += $(Get-CimInstance -Namespace root\dcim\sysman\biosattributes -ClassName IntegerAttribute)
+        write-verbose "[core][dell][wmi] Done gathering UEFI settings: Part 2"
+        write-verbose "[core][dell][wmi] Gathering UEFI settings: Part 3"
+        $uefiSettings += $(Get-CimInstance -Namespace root\dcim\sysman\biosattributes -ClassName StringAttribute)
+        write-verbose "[core][dell][wmi] Done gathering UEFI settings: Part 3"
+        write-verbose "[core][dell][wmi] Gathering UEFI settings: Boot Order"
+        $uefiSettingsBootOrders = $(Get-CimInstance -Namespace root\dcim\sysman\biosattributes -ClassName BootOrder)
+        write-verbose "[core][dell][wmi] Done gathering UEFI settings: Boot Order"
+        write-verbose "[core][dell][wmi] Done gathering all UEFI settings, found $($($uefiSettings.count) + $($uefiSettingsBootOrders.count)) settings"
+        write-verbose "[core][dell][xml] Generating..."
+        foreach ($uefiSetting in $uefiSettings) {
+            if (!([string]::IsNullOrEmpty($uefiSetting.AttributeName)) -and !([string]::IsNullOrEmpty($uefiSetting.CurrentValue))) {
+                $resultXML += $(GenerateXML $($uefiSetting.AttributeName) $($uefiSetting.CurrentValue))
+            }
+        } 
+        foreach ($uefiSettingsBootOrder in $uefiSettingsBootOrders) {
+            if (!([string]::IsNullOrEmpty($uefiSettingsBootOrder.BootListType)) -and !([string]::IsNullOrEmpty($uefiSettingsBootOrder.BootOrder))) {
+                $resultXML += $(GenerateXML $("Bootorder:",$($uefiSettingsBootOrder.BootListType) -join " ") $($(if ($($uefiSettingsBootOrder.IsActive) -eq "1"){"Active"}else{"Inactive"}),$($uefiSettingsBootOrder.BootOrder) -join ": "))
+            }
+        }        
+        write-verbose "[core][dell][xml] Done generating"
+    }
 }
 Catch {
     write-verbose $Error[0]
