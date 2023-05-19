@@ -104,7 +104,7 @@ Catch {
 }
 
 write-verbose "[core][xml] Sending report..."
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
 [Console]::WriteLine($resultXML)
 write-verbose "[core][xml] Done sending report"
 write-verbose "[core] Exiting"
