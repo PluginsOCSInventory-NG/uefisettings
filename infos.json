@@ -1,7 +1,7 @@
 {
     "displayName" : "UEFI Settings",
     "author" : ["Silvan Raijer"],
-    "contributor" : [],
+    "contributor" : ["Antoine ROBIN"],
     "supportedAgent" : ["Windows"],
     "version" : "1.2",
     "licence" : "GPLv2",
