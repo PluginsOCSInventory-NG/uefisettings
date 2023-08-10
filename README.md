@@ -2,7 +2,7 @@
 
 Gather UEFI settings from Windows Management Instrumentation (WMI)
 
-Currently HP and Lenovo, Dell are supported.
+Currently Dell, HP and Lenovo are supported.
 
 <br>TODO:
 <ul>
